@@ -1,0 +1,124 @@
+package com.mycompany.archivo1;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Main {
+
+    private void leerArchivo() {
+        try {
+            FileReader lectorArchivo = new FileReader("Hola.txt");
+            
+            int caracter = lectorArchivo.read();
+            System.out.println("Codigo ASCII " + caracter + " caracter " + (char)caracter);
+            
+            while (caracter != -1) {
+            caracter = lectorArchivo.read();
+            System.out.println("Codigo ASCII " + caracter + " caracter " + (char)caracter);
+            }
+            
+            lectorArchivo.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("No encontre el archivo solicitado");
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            System.out.println("Tengo problemas para cerrar el archivo");
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void escribirArchivo() {
+        try {
+            FileWriter escritorArchivo = new FileWriter("Hola2.txt");
+            
+            escritorArchivo.write(70);
+            escritorArchivo.write("Hola Mundo!");
+            
+            escritorArchivo.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void lecturaAleatoria() {
+        try {
+            RandomAccessFile archivo = new RandomAccessFile("datos.bin", "r");
+            
+            archivo.seek(20);
+            
+            byte letras[] = new byte[8];
+            archivo.read(letras);
+            System.out.println(new String(letras));
+            
+            archivo.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }    
+    private void escrituraBinaria() {
+        try {
+            FileOutputStream archivo = new FileOutputStream("Datos.bin");
+            
+            DataOutputStream data = new DataOutputStream(archivo);
+            data.writeBytes("Juan Antonio Lopez");
+            data.writeByte(20);
+            data.writeInt(52684521);
+            data.writeBytes("Luis Mendez");
+            data.writeByte(30);
+            data.writeInt(45628710);
+            
+            archivo.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void lecturaBinaria() {
+        try {
+            FileInputStream archivo = new FileInputStream("Datos.bin");
+            
+            DataInputStream data = new DataInputStream(archivo);
+            byte nombreBytes[] = data.readNBytes(4);
+            String nombre = new String(nombreBytes);
+            System.out.println(nombre);
+            
+            int edad = data.read();
+            System.out.println(edad);
+            
+            int telefono = data.readInt();
+            System.out.println(telefono);
+            
+            archivo.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        Main main = new Main();
+        //main.leerArchivo();
+        //main.escribirArchivo();
+        //main.escrituraBinaria();
+        //main.lecturaBinaria();
+        main.lecturaAleatoria();
+    }
+    
+}
